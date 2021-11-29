@@ -3,6 +3,7 @@ package nl.rkslot.nlapi_test_suite;
 import com.namelessmc.java_api.NamelessAPI;
 import com.namelessmc.java_api.NamelessApiBuilder;
 import nl.rkslot.nlapi_test_suite.tests.Groups;
+import nl.rkslot.nlapi_test_suite.tests.Notifications;
 import nl.rkslot.nlapi_test_suite.tests.WebsiteInfo;
 
 public class NamelessApiTest {
@@ -10,6 +11,8 @@ public class NamelessApiTest {
 	private static final TestStage[] TEST_STAGES = {
 //			new Announcements(),
 			new Groups(),
+			new Notifications(),
+//			new Registration(),
 			new WebsiteInfo(),
 	};
 

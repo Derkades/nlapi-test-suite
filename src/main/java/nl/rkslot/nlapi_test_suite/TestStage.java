@@ -1,21 +1,39 @@
 package nl.rkslot.nlapi_test_suite;
 
-import com.namelessmc.java_api.NamelessAPI;
+import java.util.concurrent.Callable;
 
 public abstract class TestStage {
 
-	public abstract void runTest(NamelessAPI api) throws Exception;
+    // TODO: reinstallNameless(String pathToCliInstallFile)
 
-	protected void assertThat(boolean condition) {
-		if (!condition) {
-			throw new AssertionError("Assertion failed");
-		}
-	}
+    private static int assertions = 0;
 
-	protected void assertThat(boolean condition, String message) {
-		if (!condition) {
-			throw new AssertionError("Assertion failed: " + message);
-		}
-	}
+    public static int getAssertions() {
+        return assertions;
+    }
+
+    protected void assertThat(final boolean condition, final String message) {
+        assertions++;
+
+        if (!condition) {
+            throw new AssertionError("Assertion failed: " + message);
+        }
+    }
+
+    protected void assertShouldThrow(final Class<? extends Throwable> expectedException, final Callable<Void> callable) {
+        assertions++;
+
+        try {
+            callable.call();
+        } catch (Exception e) {
+            if (e.getClass().equals(expectedException)) {
+                return;
+            }
+
+            throw new AssertionError("Expected exception " + expectedException.getName() + " but got " + e.getClass().getName());
+        }
+
+        throw new AssertionError("Expected exception " + expectedException.getName() + " but no exception was thrown");
+    }
 
 }

@@ -44,7 +44,7 @@ public class NamelessApiTest {
         final @NotNull NamelessAPI api = builder.build();
 
         AtomicInteger testCount = new AtomicInteger();
-        AtomicInteger passed = new AtomicInteger();
+        AtomicInteger testsPassed = new AtomicInteger();
 
         for (final @NotNull TestStage testStage : TEST_STAGES) {
             System.out.println("----------------- Starting test class: " + testStage.getClass().getSimpleName() + " -----------------");
@@ -73,7 +73,9 @@ public class NamelessApiTest {
                 System.out.println("⚠️  No tests found in " + testStage.getClass().getSimpleName());
             } else {
                 tests.forEach(method -> {
+                    final long startTest = Calendar.getInstance().getTimeInMillis();
                     testCount.getAndIncrement();
+
                     final @NotNull String testName = getTestName(method.getName());
 
                     System.out.println("⏳ Starting test: " + testName + "");
@@ -94,11 +96,14 @@ public class NamelessApiTest {
                         pass = false;
                     }
 
+                    final long finishedTest = Calendar.getInstance().getTimeInMillis();
+                    final long taken = finishedTest - startTest;
+
                     if (pass) {
-                        System.out.println("✅ Test passed: " + testName);
-                        passed.getAndIncrement();
+                        System.out.println("✅ Test passed: " + testName + " (" + taken + "ms)");
+                        testsPassed.getAndIncrement();
                     } else {
-                        System.out.println("❌ Test failed: " + testName);
+                        System.out.println("❌ Test failed: " + testName + " (" + taken + "ms)");
                     }
                 });
             }
@@ -109,7 +114,7 @@ public class NamelessApiTest {
         long ended = Calendar.getInstance().getTimeInMillis();
 
         System.out.println("---------------------- All tests completed ----------------------");
-        System.out.println("➡️  " + passed + "/" + testCount + " test stages passed");
+        System.out.println("➡️  " + testsPassed + "/" + testCount + " test stages passed");
         System.out.println("➡️  Made " + TestStage.getAssertions() + " assertions");
         System.out.println("➡️  Took " + (ended - started) + "ms");
     }

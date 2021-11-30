@@ -7,11 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class Announcements extends TestStage {
 
-	// TODO: Add tests for announcements
-	public void runTest(final @NotNull NamelessAPI api) throws Exception {
-		api.getAnnouncements();
-		NamelessUser admin = api.getUser(1).orElseThrow();
-		api.getAnnouncements(admin);
-	}
+    // TODO: Add tests for announcements
+    public void runTest(final @NotNull NamelessAPI api) throws Exception {
+        api.getAnnouncements();
+        NamelessUser admin = api.getUser(1).orElseThrow();
+        api.getAnnouncements(admin);
+    }
 
 }

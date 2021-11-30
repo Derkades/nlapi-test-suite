@@ -9,14 +9,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class Registration extends TestStage {
 
-	@Test
-	public void test_cannot_create_user_with_duplicate_username(final @NotNull NamelessAPI api) throws Exception {
-		NamelessUser adminUser = api.getUserLazy(1);
-		String username = adminUser.getUsername();
-		try {
-			api.registerUser(username, "irrelevant@email.com");
-			throw new AssertionError("creating a user with duplicate username should fail");
-		} catch (UsernameAlreadyExistsException ignored) {}
-	}
+    @Test
+    public void test_cannot_create_user_with_duplicate_username(final @NotNull NamelessAPI api) throws Exception {
+        NamelessUser adminUser = api.getUserLazy(1);
+        String username = adminUser.getUsername();
+        try {
+            api.registerUser(username, "irrelevant@email.com");
+            throw new AssertionError("creating a user with duplicate username should fail");
+        } catch (UsernameAlreadyExistsException ignored) {
+        }
+    }
 
 }

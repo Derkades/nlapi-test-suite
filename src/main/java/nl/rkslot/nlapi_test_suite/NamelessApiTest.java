@@ -53,19 +53,20 @@ public class NamelessApiTest {
         for (final @NotNull TestStage testStage : TEST_STAGES) {
             System.out.println("----------------- Starting test class: " + testStage.getClass().getSimpleName() + " -----------------");
 
-            Arrays.stream(testStage.getClass().getDeclaredMethods()).filter(m -> {
-                return m.getName().equals("beforeRun");
-            }).findFirst().ifPresent(m -> {
-                try {
-                    if (m.getParameterCount() == 1 && m.getParameterTypes()[0].equals(NamelessAPI.class)) {
-                        m.invoke(testStage, api);
-                    } else {
-                        m.invoke(testStage);
-                    }
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            });
+            Arrays.stream(testStage.getClass().getDeclaredMethods())
+                    .filter(m -> m.getName().equals("beforeRun"))
+                    .findFirst()
+                    .ifPresent(m -> {
+                            try {
+                                if (m.getParameterCount() == 1 && m.getParameterTypes()[0].equals(NamelessAPI.class)) {
+                                    m.invoke(testStage, api);
+                                } else {
+                                    m.invoke(testStage);
+                                }
+                            } catch (IllegalAccessException | InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                    });
 
             List<Method> testMethods = Arrays.stream(testStage.getClass().getDeclaredMethods())
                     .filter(method ->

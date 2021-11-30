@@ -35,4 +35,5 @@ public abstract class TestStage {
 
         throw new AssertionError("Expected exception " + expectedException.getName() + " but no exception was thrown");
     }
+
 }

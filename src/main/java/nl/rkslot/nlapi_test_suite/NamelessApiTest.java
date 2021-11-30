@@ -3,15 +3,20 @@ package nl.rkslot.nlapi_test_suite;
 import com.namelessmc.java_api.ApiError;
 import com.namelessmc.java_api.NamelessAPI;
 import com.namelessmc.java_api.NamelessApiBuilder;
-import nl.rkslot.nlapi_test_suite.tests.*;
+import nl.rkslot.nlapi_test_suite.tests.Announcements;
+import nl.rkslot.nlapi_test_suite.tests.Groups;
+import nl.rkslot.nlapi_test_suite.tests.Notifications;
+import nl.rkslot.nlapi_test_suite.tests.Registration;
+import nl.rkslot.nlapi_test_suite.tests.Reports;
+import nl.rkslot.nlapi_test_suite.tests.WebsiteInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class NamelessApiTest {
@@ -43,8 +48,7 @@ public class NamelessApiTest {
 
         final @NotNull NamelessAPI api = builder.build();
 
-        AtomicInteger testCount = new AtomicInteger();
-        AtomicInteger testsPassed = new AtomicInteger();
+        List<TestStage> failedTests = new ArrayList<>();
 
         for (final @NotNull TestStage testStage : TEST_STAGES) {
             System.out.println("----------------- Starting test class: " + testStage.getClass().getSimpleName() + " -----------------");
@@ -63,27 +67,28 @@ public class NamelessApiTest {
                 }
             });
 
-            List<Method> tests = Arrays.stream(testStage.getClass().getDeclaredMethods()).filter(method -> {
-                return method.isAnnotationPresent(Test.class)
-                        && method.getParameterCount() == 1
-                        && method.getName().startsWith("test_");
-            }).collect(Collectors.toList());
+            List<Method> testMethods = Arrays.stream(testStage.getClass().getDeclaredMethods())
+                    .filter(method ->
+                        method.isAnnotationPresent(Test.class)
+                                && method.getParameterCount() == 1
+                                && method.getName().startsWith("test_")
+            ).collect(Collectors.toList());
 
-            if (tests.isEmpty()) {
+            if (testMethods.isEmpty()) {
                 System.out.println("⚠️  No tests found in " + testStage.getClass().getSimpleName());
             } else {
-                tests.forEach(method -> {
+                boolean allSuccess = true;
+                for (Method testMethod : testMethods) {
                     final long startTest = Calendar.getInstance().getTimeInMillis();
-                    testCount.getAndIncrement();
 
-                    final @NotNull String testName = getTestName(method.getName());
+                    final @NotNull String testName = getTestName(testMethod.getName());
 
                     System.out.println("⏳ Starting test: " + testName + "");
 
                     boolean pass = true;
 
                     try {
-                        method.invoke(testStage, api);
+                        testMethod.invoke(testStage, api);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
@@ -94,6 +99,7 @@ public class NamelessApiTest {
                             e.printStackTrace();
                         }
                         pass = false;
+                        allSuccess = false;
                     }
 
                     final long finishedTest = Calendar.getInstance().getTimeInMillis();
@@ -101,11 +107,13 @@ public class NamelessApiTest {
 
                     if (pass) {
                         System.out.println("✅ Test passed: " + testName + " (" + taken + "ms)");
-                        testsPassed.getAndIncrement();
                     } else {
                         System.out.println("❌ Test failed: " + testName + " (" + taken + "ms)");
                     }
-                });
+                }
+                if (!allSuccess) {
+                    failedTests.add(testStage);
+                }
             }
 
             System.out.println();
@@ -114,7 +122,7 @@ public class NamelessApiTest {
         long ended = Calendar.getInstance().getTimeInMillis();
 
         System.out.println("---------------------- All tests completed ----------------------");
-        System.out.println("➡️  " + testsPassed + "/" + testCount + " tests passed");
+        System.out.println("➡️  Failed tests: " + failedTests.stream().map(s -> s.getClass().getSimpleName()).collect(Collectors.joining(", ")));
         System.out.println("➡️  Made " + TestStage.getAssertions() + " assertions");
         System.out.println("➡️  Took " + (ended - started) + "ms");
     }

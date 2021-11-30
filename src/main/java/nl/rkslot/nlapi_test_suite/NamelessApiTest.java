@@ -127,6 +127,8 @@ public class NamelessApiTest {
         System.out.println("➡️  Failed tests: " + failedTests.stream().map(s -> s.getClass().getSimpleName()).collect(Collectors.joining(", ")));
         System.out.println("➡️  Made " + TestStage.getAssertions() + " assertions");
         System.out.println("➡️  Took " + (ended - started) + "ms");
+
+        System.exit(failedTests.isEmpty() ? 0 : 1);
     }
 
 }

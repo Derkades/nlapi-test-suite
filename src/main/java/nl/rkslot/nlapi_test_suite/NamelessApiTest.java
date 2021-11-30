@@ -22,6 +22,7 @@ public class NamelessApiTest {
             new Notifications(),
             new Registration(),
             new WebsiteInfo(),
+            new Reports(),
     };
 
     public static void main(String @NotNull [] args) throws Exception {
@@ -48,7 +49,21 @@ public class NamelessApiTest {
         for (final @NotNull TestStage testStage : TEST_STAGES) {
             System.out.println("----------------- Starting test class: " + testStage.getClass().getSimpleName() + " -----------------");
 
-            List<Method> tests = Arrays.stream(testStage.getClass().getMethods()).filter(method -> {
+            Arrays.stream(testStage.getClass().getDeclaredMethods()).filter(m -> {
+                return m.getName().equals("beforeRun");
+            }).findFirst().ifPresent(m -> {
+                try {
+                    if (m.getParameterCount() == 1 && m.getParameterTypes()[0].equals(NamelessAPI.class)) {
+                        m.invoke(testStage, api);
+                    } else {
+                        m.invoke(testStage);
+                    }
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            List<Method> tests = Arrays.stream(testStage.getClass().getDeclaredMethods()).filter(method -> {
                 return method.isAnnotationPresent(Test.class)
                         && method.getParameterCount() == 1
                         && method.getName().startsWith("test_");
@@ -93,11 +108,11 @@ public class NamelessApiTest {
 
         long ended = Calendar.getInstance().getTimeInMillis();
 
-        System.out.println("------------------------ All tests completed ------------------------");
-        System.out.println("➡️  " + passed + "/" + testCount + " tests passed");
+        System.out.println("---------------------- All tests completed ----------------------");
+        System.out.println("➡️  " + passed + "/" + testCount + " test stages passed");
         System.out.println("➡️  Made " + TestStage.getAssertions() + " assertions");
         System.out.println("➡️  Took " + (ended - started) + "ms");
-	}
+    }
 
     private static @NotNull String getTestName(@NotNull String methodName) {
         return methodName.replace("test", "").replaceFirst("_", "").replace("_", " ");

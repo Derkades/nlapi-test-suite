@@ -31,7 +31,7 @@ public class NamelessApiTest {
     };
 
     public static void main(String @NotNull [] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0 || args.length > 2) {
             System.err.println("Usage: [api url] [enable debug]");
             System.exit(1);
         }

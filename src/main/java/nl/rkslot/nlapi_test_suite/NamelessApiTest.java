@@ -114,7 +114,7 @@ public class NamelessApiTest {
         long ended = Calendar.getInstance().getTimeInMillis();
 
         System.out.println("---------------------- All tests completed ----------------------");
-        System.out.println("➡️  " + testsPassed + "/" + testCount + " test stages passed");
+        System.out.println("➡️  " + testsPassed + "/" + testCount + " tests passed");
         System.out.println("➡️  Made " + TestStage.getAssertions() + " assertions");
         System.out.println("➡️  Took " + (ended - started) + "ms");
     }

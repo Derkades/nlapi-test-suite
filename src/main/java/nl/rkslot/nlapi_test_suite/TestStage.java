@@ -12,14 +12,6 @@ public abstract class TestStage {
         return assertions;
     }
 
-    protected void assertThat(final boolean condition) {
-        assertions++;
-
-        if (!condition) {
-            throw new AssertionError("Assertion failed");
-        }
-    }
-
     protected void assertThat(final boolean condition, final String message) {
         assertions++;
 

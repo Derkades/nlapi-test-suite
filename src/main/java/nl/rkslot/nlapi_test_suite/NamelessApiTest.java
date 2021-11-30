@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ public class NamelessApiTest {
 			System.err.println("Usage: [api url] [enable debug]");
 			System.exit(1);
 		}
+
+		long started = Calendar.getInstance().getTimeInMillis();
 
 		final @NotNull String apiUrl = args[0];
 
@@ -90,7 +93,9 @@ public class NamelessApiTest {
 			System.out.println();
 		}
 
-		System.out.println("----------------- All tests completed -----------------");
+		long ended = Calendar.getInstance().getTimeInMillis();
+
+		System.out.println("----------------- All tests completed (took " + (ended - started) + "ms) -----------------");
 		System.out.println("➡️  Ran " + testCount + " tests");
 		System.out.println("➡️  " + passed + " tests passed");
 	}

@@ -11,20 +11,20 @@ import org.jetbrains.annotations.NotNull;
 public class Groups extends TestStage {
 
     @Test
-    public void test_groups_exist(final @NotNull NamelessAPI api) throws NamelessException {
+    public void groupsExist(final @NotNull NamelessAPI api) throws NamelessException {
         assertThat(api.getGroup("Admin").size() == 1, "admin group should exist");
         assertThat(api.getGroup("Moderator").size() == 1, "moderator group should exist");
         assertThat(api.getGroup("Does not exist").size() == 0, "non-existing group should not exist");
     }
 
     @Test
-    public void test_member_group_has_correct_name(final @NotNull NamelessAPI api) throws NamelessException {
+    public void memberGroupHasCorrectName(final @NotNull NamelessAPI api) throws NamelessException {
         Group memberGroup = api.getGroup(1).orElseThrow();
         assertThat(memberGroup.getName().equals("Member"), "name of member group should be 'Member'");
     }
 
     @Test
-    public void test_adding_and_removing_groups_from_user(final @NotNull NamelessAPI api) throws NamelessException {
+    public void addRemoveUserGroups(final @NotNull NamelessAPI api) throws NamelessException {
         NamelessUser adminUser = api.getUser(1).orElseThrow();
         Group memberGroup = api.getGroup(1).orElseThrow();
 

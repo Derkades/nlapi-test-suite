@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class Reports extends TestStage {
 
     @Test
-    public void test_cannot_make_a_report_for_self(final @NotNull NamelessAPI api) {
+    public void reportSelf(final @NotNull NamelessAPI api) {
         NamelessUser user = api.getUserLazy(1);
 
         assertShouldThrow(CannotReportSelfException.class, () -> {
@@ -20,7 +20,7 @@ public class Reports extends TestStage {
     }
 
     @Test
-    public void test_cannot_exceed_report_length(final @NotNull NamelessAPI api) {
+    public void reportReasonLength(final @NotNull NamelessAPI api) {
         NamelessUser user = api.getUserLazy(1);
 
         assertShouldThrow(IllegalArgumentException.class, () -> {

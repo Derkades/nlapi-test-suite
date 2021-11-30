@@ -12,7 +12,7 @@ import java.util.List;
 public class Notifications extends TestStage {
 
     @Test
-    public void test_admin_user_has_correct_notification_count(final @NotNull NamelessAPI api) throws Exception {
+    public void adminUserNotificationCount(final @NotNull NamelessAPI api) throws Exception {
         NamelessUser adminUser = api.getUserLazy(1);
         int count = adminUser.getNotificationCount();
         List<Notification> notifications = adminUser.getNotifications();

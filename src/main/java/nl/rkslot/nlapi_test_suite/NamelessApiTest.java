@@ -69,11 +69,8 @@ public class NamelessApiTest {
                     });
 
             List<Method> testMethods = Arrays.stream(testStage.getClass().getDeclaredMethods())
-                    .filter(method ->
-                        method.isAnnotationPresent(Test.class)
-                                && method.getParameterCount() == 1
-                                && method.getName().startsWith("test_")
-            ).collect(Collectors.toList());
+                    .filter(m -> m.isAnnotationPresent(Test.class))
+                    .collect(Collectors.toList());
 
             if (testMethods.isEmpty()) {
                 System.out.println("⚠️  No tests found in " + testStage.getClass().getSimpleName());
@@ -82,9 +79,13 @@ public class NamelessApiTest {
                 for (Method testMethod : testMethods) {
                     final long startTest = Calendar.getInstance().getTimeInMillis();
 
-                    final @NotNull String testName = getTestName(testMethod.getName());
+                    if (testMethod.getParameterCount() != 1) {
+                        System.err.println("Skipped test method " + testMethod.getName() + " with invalid signature");
+                        allSuccess = false;
+                        continue;
+                    }
 
-                    System.out.println("⏳ Starting test: " + testName + "");
+                    System.out.println("⏳ Starting test: " + testMethod.getName() + "");
 
                     boolean pass = true;
 
@@ -107,9 +108,9 @@ public class NamelessApiTest {
                     final long taken = finishedTest - startTest;
 
                     if (pass) {
-                        System.out.println("✅ Test passed: " + testName + " (" + taken + "ms)");
+                        System.out.printf("✅ Test passed: %s (took %s ms)\n", testMethod.getName(), taken);
                     } else {
-                        System.out.println("❌ Test failed: " + testName + " (" + taken + "ms)");
+                        System.out.printf("❌ Test failed: %s (took %s ms)\n", testMethod.getName(), taken);
                     }
                 }
                 if (!allSuccess) {
@@ -126,10 +127,6 @@ public class NamelessApiTest {
         System.out.println("➡️  Failed tests: " + failedTests.stream().map(s -> s.getClass().getSimpleName()).collect(Collectors.joining(", ")));
         System.out.println("➡️  Made " + TestStage.getAssertions() + " assertions");
         System.out.println("➡️  Took " + (ended - started) + "ms");
-    }
-
-    private static @NotNull String getTestName(@NotNull String methodName) {
-        return methodName.replace("test", "").replaceFirst("_", "").replace("_", " ");
     }
 
 }

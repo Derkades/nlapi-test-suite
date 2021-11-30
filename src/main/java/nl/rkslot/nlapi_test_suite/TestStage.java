@@ -25,7 +25,7 @@ public abstract class TestStage {
 
         try {
             callable.call();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             if (e.getClass().equals(expectedException)) {
                 return;
             }

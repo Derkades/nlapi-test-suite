@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class Registration extends TestStage {
 
     @Test
-    public void test_cannot_create_user_with_duplicate_username(final @NotNull NamelessAPI api) throws Exception {
+    public void registerDuplicateUsername(final @NotNull NamelessAPI api) throws Exception {
         NamelessUser adminUser = api.getUserLazy(1);
         String username = adminUser.getUsername();
         // TODO check if mc integration is enabled & add uuid param as needed. this fails if mc integration is enabled

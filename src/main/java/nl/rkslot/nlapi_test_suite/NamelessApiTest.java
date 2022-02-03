@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -31,18 +32,24 @@ public class NamelessApiTest {
     };
 
     public static void main(String @NotNull [] args) throws Exception {
-        if (args.length == 0 || args.length > 2) {
-            System.err.println("Usage: [api url] [enable debug]");
+        final String apiUrlStr = System.getenv("NAMELESS_API_URL");
+        final String apiKey = System.getenv("NAMELESS_API_KEY");
+        final String enableDebugStr = System.getenv("NAMELESS_DEBUG");
+
+        if (apiUrlStr == null || apiKey == null || enableDebugStr == null) {
+            System.err.println("Please specify the environment variables: NAMELESS_API_URL, NAMELESS_API_KEY, NAMELESS_DEBUG");
             System.exit(1);
         }
 
+        final URL apiUrl = new URL(apiUrlStr);
+        final boolean enableDebug = Boolean.parseBoolean(enableDebugStr);
+
         long started = Calendar.getInstance().getTimeInMillis();
 
-        final @NotNull NamelessApiBuilder builder = NamelessAPI.builder()
-                .userAgent("NamelessApiTestSuite")
-                .apiUrl(args[0]);
+        final @NotNull NamelessApiBuilder builder = NamelessAPI.builder(apiUrl, apiKey)
+                .userAgent("NamelessApiTestSuite");
 
-        if (args.length == 2 && Boolean.parseBoolean(args[1])) {
+        if (enableDebug) {
             builder.withStdErrDebugLogging();
         }
 

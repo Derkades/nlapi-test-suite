@@ -34,15 +34,16 @@ public class NamelessApiTest {
     public static void main(String @NotNull [] args) throws Exception {
         final String apiUrlStr = System.getenv("NAMELESS_API_URL");
         final String apiKey = System.getenv("NAMELESS_API_KEY");
-        final String enableDebugStr = System.getenv("NAMELESS_DEBUG");
 
-        if (apiUrlStr == null || apiKey == null || enableDebugStr == null) {
+        if (apiUrlStr == null || apiKey == null) {
             System.err.println("Please specify the environment variables: NAMELESS_API_URL, NAMELESS_API_KEY, NAMELESS_DEBUG");
             System.exit(1);
         }
 
         final URL apiUrl = new URL(apiUrlStr);
-        final boolean enableDebug = Boolean.parseBoolean(enableDebugStr);
+
+        boolean enableDebug = System.getenv("NAMELESS_DEBUG") != null;
+        boolean exitOnFail = System.getenv("NAMELESS_EXIT_ON_FAIL") != null;
 
         long started = Calendar.getInstance().getTimeInMillis();
 
@@ -94,12 +95,13 @@ public class NamelessApiTest {
 
                     System.out.println("⏳ Starting test: " + testMethod.getName() + "");
 
-                    boolean pass = true;
-
+                    boolean pass;
                     try {
                         testMethod.invoke(testStage, api);
+                        pass = true;
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
+                        pass = false;
                     } catch (InvocationTargetException e) {
                         if (e.getCause() instanceof AssertionError || e.getCause() instanceof ApiError) {
                             // print the assertion error or api error directly, don't waste screen space on the whole stacktrace
@@ -108,7 +110,6 @@ public class NamelessApiTest {
                             e.printStackTrace();
                         }
                         pass = false;
-                        allSuccess = false;
                     }
 
                     final long finishedTest = Calendar.getInstance().getTimeInMillis();
@@ -118,6 +119,10 @@ public class NamelessApiTest {
                         System.out.printf("✅ Test passed: %s (took %s ms)\n", testMethod.getName(), taken);
                     } else {
                         System.out.printf("❌ Test failed: %s (took %s ms)\n", testMethod.getName(), taken);
+                        allSuccess = false;
+                        if (exitOnFail) {
+                            System.exit(1);
+                        }
                     }
                 }
                 if (!allSuccess) {

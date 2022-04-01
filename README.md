@@ -7,5 +7,9 @@ the API, don't run it on a NamelessMC install you care about.
 
 ```sh
 mvn package shade:shade
-java -jar target/nlapi-test-suite-dev.jar <api url> <enable debug true/false (default false)>
+export NAMELESS_API_URL="https://yoursite.com/index.php?route=/api/v2"
+export NAMELESS_API_KEY="insert_api_key"
+# export NAMELESS_DEBUG=1
+# export NAMELESS_EXIT_ON_FAIL=1
+java -jar target/nlapi-test-suite-dev.jar
 ```

@@ -6,7 +6,7 @@ The API URL should be for a freshly installed website from the `v2` branch. This
 the API, don't run it on a NamelessMC install you care about.
 
 ```sh
-mvn package shade:shade
+mvn package
 export NAMELESS_API_URL="https://yoursite.com/index.php?route=/api/v2"
 export NAMELESS_API_KEY="insert_api_key"
 # export NAMELESS_DEBUG=1

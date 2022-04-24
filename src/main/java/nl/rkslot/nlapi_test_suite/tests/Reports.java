@@ -5,12 +5,12 @@ import com.namelessmc.java_api.NamelessUser;
 import com.namelessmc.java_api.exception.CannotReportSelfException;
 import nl.rkslot.nlapi_test_suite.Test;
 import nl.rkslot.nlapi_test_suite.TestStage;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class Reports extends TestStage {
 
     @Test
-    public void reportSelf(final @NotNull NamelessAPI api) {
+    public void reportSelf(final @NonNull NamelessAPI api) {
         NamelessUser user = api.getUserLazy(1);
 
         assertShouldThrow(CannotReportSelfException.class, () -> {
@@ -20,7 +20,7 @@ public class Reports extends TestStage {
     }
 
     @Test
-    public void reportReasonLength(final @NotNull NamelessAPI api) {
+    public void reportReasonLength(final @NonNull NamelessAPI api) {
         NamelessUser user = api.getUserLazy(1);
 
         assertShouldThrow(IllegalArgumentException.class, () -> {

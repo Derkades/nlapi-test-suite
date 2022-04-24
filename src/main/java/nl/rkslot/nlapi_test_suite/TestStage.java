@@ -4,8 +4,6 @@ import java.util.concurrent.Callable;
 
 public abstract class TestStage {
 
-    // TODO: reinstallNameless(String pathToCliInstallFile)
-
     private static int assertions = 0;
 
     public static int getAssertions() {

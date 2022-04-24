@@ -3,13 +3,8 @@ package nl.rkslot.nlapi_test_suite;
 import com.namelessmc.java_api.ApiError;
 import com.namelessmc.java_api.NamelessAPI;
 import com.namelessmc.java_api.NamelessApiBuilder;
-import nl.rkslot.nlapi_test_suite.tests.Announcements;
-import nl.rkslot.nlapi_test_suite.tests.Groups;
-import nl.rkslot.nlapi_test_suite.tests.Notifications;
-import nl.rkslot.nlapi_test_suite.tests.Registration;
-import nl.rkslot.nlapi_test_suite.tests.Reports;
-import nl.rkslot.nlapi_test_suite.tests.WebsiteInfo;
-import org.jetbrains.annotations.NotNull;
+import nl.rkslot.nlapi_test_suite.tests.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class NamelessApiTest {
 
-    private static final @NotNull TestStage[] TEST_STAGES = {
+    private static final TestStage[] TEST_STAGES = {
             new Announcements(),
             new Groups(),
             new Notifications(),
@@ -31,7 +26,7 @@ public class NamelessApiTest {
             new Reports(),
     };
 
-    public static void main(String @NotNull [] args) throws Exception {
+    public static void main(final @NonNull String @NonNull[] args) throws Exception {
         final String apiUrlStr = System.getenv("NAMELESS_API_URL");
         final String apiKey = System.getenv("NAMELESS_API_KEY");
 
@@ -47,18 +42,18 @@ public class NamelessApiTest {
 
         long started = Calendar.getInstance().getTimeInMillis();
 
-        final @NotNull NamelessApiBuilder builder = NamelessAPI.builder(apiUrl, apiKey)
+        final NamelessApiBuilder builder = NamelessAPI.builder(apiUrl, apiKey)
                 .userAgent("NamelessApiTestSuite");
 
         if (enableDebug) {
             builder.withStdErrDebugLogging();
         }
 
-        final @NotNull NamelessAPI api = builder.build();
+        final NamelessAPI api = builder.build();
 
         List<TestStage> failedTests = new ArrayList<>();
 
-        for (final @NotNull TestStage testStage : TEST_STAGES) {
+        for (final @NonNull TestStage testStage : TEST_STAGES) {
             System.out.println("----------------- Starting test class: " + testStage.getClass().getSimpleName() + " -----------------");
 
             Arrays.stream(testStage.getClass().getDeclaredMethods())

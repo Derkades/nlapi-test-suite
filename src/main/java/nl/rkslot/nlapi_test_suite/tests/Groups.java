@@ -19,14 +19,17 @@ public class Groups extends TestStage {
 
     @Test
     public void memberGroupHasCorrectName(final @NonNull NamelessAPI api) throws NamelessException {
-        Group memberGroup = api.getGroup(1).orElseThrow();
+        Group memberGroup = api.getGroup(1);
+        assertThat(memberGroup != null, "member group should exist");
         assertThat(memberGroup.getName().equals("Member"), "name of member group should be 'Member'");
     }
 
     @Test
     public void addRemoveUserGroups(final @NonNull NamelessAPI api) throws NamelessException {
-        NamelessUser adminUser = api.getUser(1).orElseThrow();
-        Group memberGroup = api.getGroup(1).orElseThrow();
+        NamelessUser adminUser = api.getUser(1);
+        assertThat(adminUser != null, "admin user should exist");
+        Group memberGroup = api.getGroup(1);
+        assertThat(memberGroup != null, "member group should exist");
 
         adminUser.addGroups(memberGroup);
         assertThat(adminUser.getGroups().contains(memberGroup), "admin user should have member group after adding it, but it has groups: " + adminUser.getGroups());

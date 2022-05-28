@@ -1,8 +1,8 @@
 package nl.rkslot.nlapi_test_suite;
 
-import com.namelessmc.java_api.ApiError;
 import com.namelessmc.java_api.NamelessAPI;
 import com.namelessmc.java_api.NamelessApiBuilder;
+import com.namelessmc.java_api.NamelessException;
 import nl.rkslot.nlapi_test_suite.tests.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -46,7 +46,7 @@ public class NamelessApiTest {
                 .userAgent("NamelessApiTestSuite");
 
         if (enableDebug) {
-            builder.withStdErrDebugLogging();
+            builder.stdErrDebugLogger();
         }
 
         final NamelessAPI api = builder.build();
@@ -98,7 +98,7 @@ public class NamelessApiTest {
                         e.printStackTrace();
                         pass = false;
                     } catch (InvocationTargetException e) {
-                        if (e.getCause() instanceof AssertionError || e.getCause() instanceof ApiError) {
+                        if (e.getCause() instanceof AssertionError || e.getCause() instanceof NamelessException) {
                             // print the assertion error or api error directly, don't waste screen space on the whole stacktrace
                             e.getCause().printStackTrace();
                         } else {

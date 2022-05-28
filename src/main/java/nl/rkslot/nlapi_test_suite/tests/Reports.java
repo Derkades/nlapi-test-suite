@@ -1,8 +1,10 @@
 package nl.rkslot.nlapi_test_suite.tests;
 
 import com.namelessmc.java_api.NamelessAPI;
+import com.namelessmc.java_api.NamelessException;
 import com.namelessmc.java_api.NamelessUser;
-import com.namelessmc.java_api.exception.CannotReportSelfException;
+import com.namelessmc.java_api.exception.ApiError;
+import com.namelessmc.java_api.exception.ApiException;
 import nl.rkslot.nlapi_test_suite.Test;
 import nl.rkslot.nlapi_test_suite.TestStage;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -10,13 +12,18 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public class Reports extends TestStage {
 
     @Test
-    public void reportSelf(final @NonNull NamelessAPI api) {
+    public void reportSelf(final @NonNull NamelessAPI api) throws NamelessException {
         NamelessUser user = api.getUserLazy(1);
-
-        assertShouldThrow(CannotReportSelfException.class, () -> {
+        try {
             user.createReport(user, "Fake report");
-            return null;
-        });
+        } catch (ApiException e) {
+            if (e.apiError() == ApiError.CORE_CANNOT_REPORT_YOURSELF) {
+                // This is good
+                return;
+            }
+        }
+
+        throw new AssertionError("Creating report should return 'cannot report yourself' error");
     }
 
     @Test

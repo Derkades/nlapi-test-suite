@@ -8,6 +8,10 @@
     <artifactId>nlapi-test-suite</artifactId>
     <version>dev</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

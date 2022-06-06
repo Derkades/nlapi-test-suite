@@ -12,8 +12,8 @@ public class Registration extends TestStage {
 
     @Test
     public void registerDuplicateUsername(final @NonNull NamelessAPI api) throws Exception {
-        NamelessUser adminUser = api.getUserLazy(1);
-        String username = adminUser.getUsername();
+        NamelessUser adminUser = api.userLazy(1);
+        String username = adminUser.username();
         try {
             api.registerUser(username, "irrelevant@email.com");
         } catch (ApiException e) {

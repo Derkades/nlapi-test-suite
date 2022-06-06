@@ -13,9 +13,9 @@ public class Notifications extends TestStage {
 
     @Test
     public void adminUserNotificationCount(final @NonNull NamelessAPI api) throws Exception {
-        NamelessUser adminUser = api.getUserLazy(1);
-        int count = adminUser.getNotificationCount();
-        List<Notification> notifications = adminUser.getNotifications();
+        NamelessUser adminUser = api.userLazy(1);
+        int count = adminUser.notificationCount();
+        List<Notification> notifications = adminUser.notifications();
         assertThat(notifications.size() == count, "notifcation count should be: " + count + ", but was: " + notifications.size());
     }
 }

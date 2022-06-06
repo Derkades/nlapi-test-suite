@@ -15,20 +15,20 @@ public class WebsiteInfo extends TestStage {
 
     @Test
     public void langauge(final @NonNull NamelessAPI api) throws Exception {
-        final Website website = api.getWebsite();
-        assertThat(website.getRawLocale().equals("en_UK"), "expected en_UK, got " + website.getRawLocale());
-        assertThat(website.getLocale().equals(new Locale("en", "UK")), "unexpected Locale object, got " + website.getLocale());
+        final Website website = api.website();
+        assertThat(website.rawLocale().equals("en_UK"), "expected en_UK, got " + website.rawLocale());
+        assertThat(website.locale().equals(new Locale("en", "UK")), "unexpected Locale object, got " + website.locale());
     }
 
     @Test
     public void moduleCount(final @NonNull NamelessAPI api) throws Exception {
-        assertThat(api.getWebsite().getModules().length == 4, "expected 4 modules installed by default, got " + api.getWebsite().getModules().length);
+        assertThat(api.website().getModules().length == 4, "expected 4 modules installed by default, got " + api.website().getModules().length);
     }
 
     @Test
     public void versionIsLatest(final @NonNull NamelessAPI api) throws Exception {
-        assertThat(api.getWebsite().getParsedVersion() == NAMELESS_VERSION,
-                "expected " + NAMELESS_VERSION + ", got " + api.getWebsite().getVersion());
+        assertThat(api.website().parsedVersion() == NAMELESS_VERSION,
+                "expected " + NAMELESS_VERSION + ", got " + api.website().rawVersion());
     }
 
 }

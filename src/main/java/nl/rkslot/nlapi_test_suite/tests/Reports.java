@@ -13,7 +13,7 @@ public class Reports extends TestStage {
 
     @Test
     public void reportSelf(final @NonNull NamelessAPI api) throws NamelessException {
-        NamelessUser user = api.getUserLazy(1);
+        NamelessUser user = api.userLazy(1);
         try {
             user.createReport(user, "Fake report");
         } catch (ApiException e) {
@@ -28,7 +28,7 @@ public class Reports extends TestStage {
 
     @Test
     public void reportReasonLength(final @NonNull NamelessAPI api) {
-        NamelessUser user = api.getUserLazy(1);
+        NamelessUser user = api.userLazy(1);
 
         assertShouldThrow(IllegalArgumentException.class, () -> {
             user.createReport(user, "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +

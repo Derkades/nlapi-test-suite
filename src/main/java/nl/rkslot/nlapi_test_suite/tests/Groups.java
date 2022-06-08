@@ -32,8 +32,8 @@ public class Groups extends TestStage {
         assertThat(memberGroup != null, "member group should exist");
 
         adminUser.addGroups(memberGroup);
-        assertThat(adminUser.getGroups().contains(memberGroup), "admin user should have member group after adding it, but it has groups: " + adminUser.getGroups());
+        assertThat(adminUser.groups().contains(memberGroup), "admin user should have member group after adding it, but it has groups: " + adminUser.groups());
         adminUser.removeGroups(memberGroup);
-        assertThat(!adminUser.getGroups().contains(memberGroup), "admin user should not have member group after removing it, but it has groups: " + adminUser.getGroups());
+        assertThat(!adminUser.groups().contains(memberGroup), "admin user should not have member group after removing it, but it has groups: " + adminUser.groups());
     }
 }

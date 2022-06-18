@@ -2,7 +2,7 @@ package nl.rkslot.nlapi_test_suite;
 
 import com.namelessmc.java_api.NamelessAPI;
 import com.namelessmc.java_api.NamelessApiBuilder;
-import com.namelessmc.java_api.NamelessException;
+import com.namelessmc.java_api.exception.NamelessException;
 import nl.rkslot.nlapi_test_suite.tests.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

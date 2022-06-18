@@ -2,7 +2,7 @@ package nl.rkslot.nlapi_test_suite.tests;
 
 import com.namelessmc.java_api.Group;
 import com.namelessmc.java_api.NamelessAPI;
-import com.namelessmc.java_api.NamelessException;
+import com.namelessmc.java_api.exception.NamelessException;
 import com.namelessmc.java_api.NamelessUser;
 import nl.rkslot.nlapi_test_suite.Test;
 import nl.rkslot.nlapi_test_suite.TestStage;
